@@ -9,9 +9,7 @@ import {
   ErrorForm,
 } from './ContactForm.styled';
 import * as yup from 'yup';
-
 import { Box } from 'components/Box';
-import { Component } from 'react';
 
 const values = { name: '', number: '' };
 
@@ -26,47 +24,45 @@ const schema = yup.object().shape({
     .required(),
 });
 
-export class ContactForm extends Component {
-  handleSubmit = (values, { resetForm }) => {
+export const ContactForm = ({ onSubmit }) => {
+  const handleSubmit = (values, { resetForm }) => {
     const contactValue = values;
-    this.props.onSubmit(contactValue);
+    onSubmit(contactValue);
     resetForm();
   };
 
-  render() {
-    return (
-      <Box
-        as="section"
-        mb="20px"
-        mx="auto"
-        width="400px"
-        border="1px solid"
-        p="20px"
+  return (
+    <Box
+      as="section"
+      mb="20px"
+      mx="auto"
+      width="400px"
+      border="1px solid"
+      p="20px"
+    >
+      <Title>Phonebook</Title>
+      <Formik
+        initialValues={values}
+        validationSchema={schema}
+        onSubmit={handleSubmit}
       >
-        <Title>Phonebook</Title>
-        <Formik
-          initialValues={values}
-          validationSchema={schema}
-          onSubmit={this.handleSubmit}
-        >
-          <FormContact>
-            <label>
-              <Text>Name</Text>
-              <FormInput type="text" name="name" />
-              <ErrorMessage name="name" component={ErrorForm} />
-            </label>
-            <label>
-              <Text>Number</Text>
-              <FormInput type="tel" name="number" />
-              <ErrorMessage name="number" component={ErrorForm} />
-            </label>
-            <Btn type="submit">Add contact</Btn>
-          </FormContact>
-        </Formik>
-      </Box>
-    );
-  }
-}
+        <FormContact>
+          <label>
+            <Text>Name</Text>
+            <FormInput type="text" name="name" />
+            <ErrorMessage name="name" component={ErrorForm} />
+          </label>
+          <label>
+            <Text>Number</Text>
+            <FormInput type="tel" name="number" />
+            <ErrorMessage name="number" component={ErrorForm} />
+          </label>
+          <Btn type="submit">Add contact</Btn>
+        </FormContact>
+      </Formik>
+    </Box>
+  );
+};
 
 ContactForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
